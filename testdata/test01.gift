@@ -1,0 +1,24 @@
+::PeopleInGrantsTomb::
+What two people are entombed in Grant's tomb? {
+   ~%-100%No one
+   ~%50%Grant
+   ~%50%Grant's wife
+   ~%-100%Grant's father
+}
+
+Question {
+    ~%50%Correct Option 1
+    ~%50%Correct Option 2
+    ~%-100%Incorrect Option 1
+    ~%-100%Incorrect Option 2
+}
+
+Question {
+    ~%20%Correct
+    ~%20%Correct # Kommentar2
+    ~%20%Correct 
+    ~%20%Correct
+    ~%20%Correct
+    ~%-100%Incorrect
+    ~%-100%Incorrect
+}
