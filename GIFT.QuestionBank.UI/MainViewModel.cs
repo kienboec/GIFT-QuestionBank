@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GIFT.QuestionBank.UI.Model;
 
 namespace GIFT.QuestionBank.UI
@@ -12,6 +13,10 @@ namespace GIFT.QuestionBank.UI
     public class MainViewModel : ViewModelBase
     {
         public ObservableCollection<Question> Questions { get; }
+
+        public RelayCommand ExitCommand { get; }
+
+        public event EventHandler<EventArgs> RequestExit;
 
         public MainViewModel()
         {
@@ -60,6 +65,11 @@ namespace GIFT.QuestionBank.UI
                     }
                 });
             }
+
+            ExitCommand = new RelayCommand(() =>
+            {
+                RequestExit?.Invoke(this, EventArgs.Empty);
+            });
         }
     }
 }
