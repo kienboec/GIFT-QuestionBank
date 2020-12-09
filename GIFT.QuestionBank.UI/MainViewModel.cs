@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GIFT.QuestionBank.UI.Model;
+using GIFT.QuestionBank.Shared.Model;
 
 namespace GIFT.QuestionBank.UI
 {
@@ -24,59 +24,70 @@ namespace GIFT.QuestionBank.UI
             //if (this.IsInDesignMode)
             {
                 Questions = new ObservableCollection<Question>();
-                Questions.Add(new Question()
+
                 {
-                    QuestionName = "PeopleInGrantsTomb",
-                    QuestionText = "What two people are entombed in Grant's tomb?",
-                    Choices = new ObservableCollection<QuestionChoice>()
+                    var question = new Question()
                     {
-                        new QuestionChoice()
-                        {
-                            Percentage = -100,
-                            Text = "No one",
-                            Feedback = null
-                        },
+                        QuestionName = "PeopleInGrantsTomb",
+                        QuestionText = "What two people are entombed in Grant's tomb?"
+                    };
+
+                    question.Choices.Add(new QuestionChoice()
+                    {
+                        Percentage = -100,
+                        Text = "No one",
+                        Feedback = null
+                    });
+
+                    question.Choices.Add(
                         new QuestionChoice()
                         {
                             Percentage = 100,
                             Text = "Some one",
                             Feedback = "right... good choice"
-                        }
-                    }
-                });
+                        });
 
-                Questions.Add(new Question()
+                    Questions.Add(question);
+                }
+
                 {
-                    QuestionName = "name1",
-                    QuestionText = "text1",
-                    Choices = new ObservableCollection<QuestionChoice>()
+                    var question = new Question()
                     {
+                        QuestionName = "name1",
+                        QuestionText = "text1",
+                    };
+
+                    question.Choices.Add(
                         new QuestionChoice()
                         {
                             Percentage = 100,
                             Text = "good",
                             Feedback = "right... good choice"
-                        },
+                        });
+
+                    question.Choices.Add(
                         new QuestionChoice()
                         {
                             Percentage = -100,
                             Text = "bad",
                             Feedback = null
-                        },
-                    }
-                });
+                        });
+
+                    Questions.Add(question);
+                }
+
             }
 
             ExitCommand = new RelayCommand(() =>
-            {
-                RequestExit?.Invoke(this, EventArgs.Empty);
-            });
+                    {
+                        RequestExit?.Invoke(this, EventArgs.Empty);
+                    });
             DeleteQuestionCommand = new RelayCommand<Question>(
                 (question) =>
                 {
                     Questions.Remove(question);
                     DeleteQuestionCommand.RaiseCanExecuteChanged();
-                }, 
+                },
                 (question) => Questions.Count > 1);
         }
     }

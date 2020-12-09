@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIFT.QuestionBank.UI.Model
+namespace GIFT.QuestionBank.Shared.Model
 {
     public class Question
     {
         public string QuestionName { get; set; }
         public string QuestionText { get; set; }
-        public ObservableCollection<QuestionChoice> Choices { get; set; }
+        public ObservableCollection<QuestionChoice> Choices { get; } = new ObservableCollection<QuestionChoice>();
     }
 }
