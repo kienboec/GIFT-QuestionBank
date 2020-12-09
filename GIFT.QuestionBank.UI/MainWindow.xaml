@@ -37,7 +37,29 @@
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Questions}" IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding QuestionName}"></TextBlock>
+                    <DataTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard TargetProperty="Height">
+                                    <DoubleAnimation From="20" To="50" Duration="0:00:00.5"></DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard TargetProperty="Height">
+                                    <DoubleAnimation From="50" To="20" Duration="0:00:00.5"></DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                    </DataTemplate.Triggers>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding QuestionName}"></TextBlock>
+                        <Button Margin="15,0,0,0" Command="{Binding DataContext.DeleteQuestionCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" CommandParameter="{Binding}">
+                            <Image Source="Images/delete.png" Height="16" Width="16" ></Image>
+                        </Button>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

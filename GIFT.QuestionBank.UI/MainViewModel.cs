@@ -15,6 +15,7 @@ namespace GIFT.QuestionBank.UI
         public ObservableCollection<Question> Questions { get; }
 
         public RelayCommand ExitCommand { get; }
+        public RelayCommand<Question> DeleteQuestionCommand { get; }
 
         public event EventHandler<EventArgs> RequestExit;
 
@@ -70,6 +71,13 @@ namespace GIFT.QuestionBank.UI
             {
                 RequestExit?.Invoke(this, EventArgs.Empty);
             });
+            DeleteQuestionCommand = new RelayCommand<Question>(
+                (question) =>
+                {
+                    Questions.Remove(question);
+                    DeleteQuestionCommand.RaiseCanExecuteChanged();
+                }, 
+                (question) => Questions.Count > 1);
         }
     }
 }
