@@ -82,9 +82,9 @@ namespace GIFT.QuestionBank.UI
 
             }
 
-            LoadDataCommand = new RelayCommand(() =>
+            LoadDataCommand = new RelayCommand(async () =>
             {
-                LoadData();
+                await LoadData();
             });
             ExitCommand = new RelayCommand(() =>
                     {
@@ -99,16 +99,48 @@ namespace GIFT.QuestionBank.UI
                 (question) => Questions.Count > 1);
         }
 
-        private void LoadData()
+        private async Task LoadData()
         {
-            using TcpClient client = new TcpClient("localhost", 8000);
-            using var reader = new StreamReader(client.GetStream());
-            using var writer = new StreamWriter(client.GetStream()){ AutoFlush = true };
+            List<Question> questions = new List<Question>();
 
-            List<string> questionNames = new List<string>();
+            
 
-            writer.WriteLine("LIST");
-            string line;
+            await Task.Run(async () =>
+            {
+
+                using TcpClient client = new TcpClient("localhost", 8000);
+                using var reader = new StreamReader(client.GetStream());
+                using var writer = new StreamWriter(client.GetStream()) {AutoFlush = true};
+
+                List<string> questionNames = new List<string>();
+                string line;
+
+                await writer.WriteLineAsync("LIST");
+
+                // add item line by line
+                while (!string.IsNullOrWhiteSpace(line = await reader.ReadLineAsync()))
+                {
+                    questionNames.Add(line);
+                }
+
+                foreach (var questionName in questionNames)
+                {
+                    await writer.WriteLineAsync("GET");
+                    await writer.WriteLineAsync(questionName);
+
+                    StringBuilder giftQuestion = new StringBuilder();
+                    while (!string.IsNullOrWhiteSpace(line = await reader.ReadLineAsync()))
+                    {
+                        giftQuestion.AppendLine(line);
+                    }
+
+                    GIFTParser parser = new GIFTParser();
+                    var questionsOfGift = parser.Parse(giftQuestion.ToString());
+                    questions.AddRange(questionsOfGift);
+                }
+
+                await writer.WriteLineAsync("QUIT");
+            });
 
             // reset
             while (this.Questions.Count > 0)
@@ -116,32 +148,10 @@ namespace GIFT.QuestionBank.UI
                 this.Questions.RemoveAt(0);
             }
 
-            // add item line by line
-            while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()))
+            foreach (var question in questions)
             {
-                questionNames.Add(line);
+                this.Questions.Add(question);
             }
-
-            foreach (var questionName in questionNames)
-            {
-                writer.WriteLine("GET");
-                writer.WriteLine(questionName);
-
-                StringBuilder giftQuestion = new StringBuilder();
-                while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()))
-                {
-                    giftQuestion.AppendLine(line);
-                }
-
-                GIFTParser parser = new GIFTParser();
-                var questions = parser.Parse(giftQuestion.ToString());
-                foreach (var question in questions)
-                {
-                    this.Questions.Add(question);
-                }
-            }
-
-            writer.WriteLine("QUIT");
         }
     }
 }
