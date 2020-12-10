@@ -9,6 +9,12 @@ namespace GIFT.QuestionBank.Shared.Parser
 {
     public class GIFTParser
     {
+        public IEnumerable<Question> Parse(string giftContent)
+        {
+            var tokenizer = new GIFTTokenizer();
+            return this.Parse(tokenizer.Tokenize(giftContent));
+        }
+
         public IEnumerable<Question> Parse(IEnumerable<GIFTToken> tokens)
         {
             List<Question> questions = new List<Question>();

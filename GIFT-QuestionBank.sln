@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GIFT.QuestionBank.Shared", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GIFT.QuestionBank.Shared.Tests", "GIFT.QuestionBank.Shared.Tests\GIFT.QuestionBank.Shared.Tests.csproj", "{B89BF505-A80E-4538-95DD-B73F5A0B1C0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GIFT.QuestionBank.Server", "GIFT.QuestionBank.Server\GIFT.QuestionBank.Server.csproj", "{C0F239C4-E0D1-4580-8359-E05F4E9824F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B89BF505-A80E-4538-95DD-B73F5A0B1C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B89BF505-A80E-4538-95DD-B73F5A0B1C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B89BF505-A80E-4538-95DD-B73F5A0B1C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0F239C4-E0D1-4580-8359-E05F4E9824F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0F239C4-E0D1-4580-8359-E05F4E9824F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0F239C4-E0D1-4580-8359-E05F4E9824F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0F239C4-E0D1-4580-8359-E05F4E9824F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
