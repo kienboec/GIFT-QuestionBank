@@ -25,6 +25,16 @@ namespace GIFT.QuestionBank.UI
 
         public event EventHandler<EventArgs> RequestExit;
 
+        public bool IsTimerEnabled
+        {
+            get => _dispatcherTimer.IsEnabled;
+            set
+            {
+                _dispatcherTimer.IsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private DispatcherTimer _dispatcherTimer;
         private int _remainingSeconds;
         public const int IntervalToLoadInSec = 10;
@@ -54,9 +64,11 @@ namespace GIFT.QuestionBank.UI
                 }
             };
             _dispatcherTimer.Start();
+            IsTimerEnabled = !this.IsInDesignMode;
 
             if (this.IsInDesignMode)
             {
+                
                 {
                     var question = new Question()
                     {

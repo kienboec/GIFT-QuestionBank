@@ -9,15 +9,7 @@
         Title="Question Bank Manager" Height="395" Width="545"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.Resources>
-        <local:RightOrWrongPercentageToBrushConverter x:Key="RightOrWrongPercentageToBrushConverter"></local:RightOrWrongPercentageToBrushConverter>
-        <Style TargetType="TextBox">
-            <Setter Property="Width" Value="200" />
-        </Style>
-        <Style x:Key="TextAreaStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="Height" Value="64" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="AcceptsTab" Value="True" />
-        </Style>
+        
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="RequestExit" SourceObject="{Binding}">
@@ -44,6 +36,7 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
+            <CheckBox IsChecked="{Binding IsTimerEnabled}">Enable Timer</CheckBox>
         </StackPanel>
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Questions}" IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>
@@ -69,37 +62,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
-            <WrapPanel Margin="5">
-                <Label Width="100">Question Name</Label>
-                <TextBox Text="{Binding Questions/QuestionName}"></TextBox>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <Label Width="100">Question Text</Label>
-                <TextBox Style="{StaticResource TextAreaStyle}" Text="{Binding Questions/QuestionText}" />
-            </WrapPanel>
-            <DataGrid ItemsSource="{Binding Questions/Choices}"
-                      AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Text}" Header="Choice"/>
-                    <DataGridTextColumn Binding="{Binding Percentage, UpdateSourceTrigger=PropertyChanged}" Header="Percentage"/>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Ellipse Height="10" Width="10" Fill="{Binding Percentage, Converter={StaticResource RightOrWrongPercentageToBrushConverter}}"></Ellipse>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Percentage, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Feedback" Binding="{Binding Feedback}"/>
-                </DataGrid.Columns>
-
-            </DataGrid>
-        </StackPanel>
+        <local:QuestionDetailUserControl Grid.Row="1" Grid.Column="1" />
         <Button Grid.Row="2" Grid.Column="0" Margin="5" Command="{Binding ExitCommand}">Exit</Button>
     </Grid>
 </Window>
