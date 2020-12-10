@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GIFT.QuestionBank.Shared.Model;
@@ -23,9 +25,35 @@ namespace GIFT.QuestionBank.UI
 
         public event EventHandler<EventArgs> RequestExit;
 
+        private DispatcherTimer _dispatcherTimer;
+        private int _remainingSeconds;
+        public const int IntervalToLoadInSec = 10;
+
+        public int RemainingSeconds
+        {
+            get => _remainingSeconds;
+            set
+            {
+                this.Set(ref _remainingSeconds, value, nameof(RemainingSeconds));
+            }
+        }
+
         public MainViewModel()
         {
             Questions = new ObservableCollection<Question>();
+            RemainingSeconds = IntervalToLoadInSec;
+            _dispatcherTimer = new DispatcherTimer();
+            _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+            _dispatcherTimer.Tick += (sender, e) =>
+            {
+                RemainingSeconds = RemainingSeconds - 1;
+                if (RemainingSeconds <= 0)
+                {
+                    LoadDataCommand.Execute(null);
+                    RemainingSeconds = IntervalToLoadInSec;
+                }
+            };
+            _dispatcherTimer.Start();
 
             if (this.IsInDesignMode)
             {
@@ -107,6 +135,14 @@ namespace GIFT.QuestionBank.UI
 
             await Task.Run(async () =>
             {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // reset
+                    while (this.Questions.Count > 0)
+                    {
+                        this.Questions.RemoveAt(0);
+                    }
+                });
 
                 using TcpClient client = new TcpClient("localhost", 8000);
                 using var reader = new StreamReader(client.GetStream());
@@ -142,11 +178,7 @@ namespace GIFT.QuestionBank.UI
                 await writer.WriteLineAsync("QUIT");
             });
 
-            // reset
-            while (this.Questions.Count > 0)
-            {
-                this.Questions.RemoveAt(0);
-            }
+            
 
             foreach (var question in questions)
             {

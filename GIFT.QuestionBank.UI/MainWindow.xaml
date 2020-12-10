@@ -35,7 +35,15 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
-            <Button Command="{Binding LoadDataCommand}">Load Data From Server</Button>
+            <Button Command="{Binding LoadDataCommand}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Get Data (" />
+                        <TextBlock Text="{Binding RemainingSeconds}" />
+                        <TextBlock Text=")" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
         </StackPanel>
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Questions}" IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>
