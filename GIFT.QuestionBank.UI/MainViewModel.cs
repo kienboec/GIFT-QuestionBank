@@ -23,6 +23,8 @@ namespace GIFT.QuestionBank.UI
         public RelayCommand LoadDataCommand { get; }
         public RelayCommand<Question> DeleteQuestionCommand { get; }
         public RelayCommand<Question> PresentQuestionCommand { get; }
+        public RelayCommand<Question> EditQuestionCommand { get; }
+
         public event EventHandler<EventArgs> RequestExit;
 
         private ViewModelBase _questionDetailVM;
@@ -155,6 +157,11 @@ namespace GIFT.QuestionBank.UI
                 (question) =>
                 {
                     DetailVM = _presentationVM;
+                });
+            EditQuestionCommand = new RelayCommand<Question>(
+                (question) =>
+                {
+                    DetailVM = _questionDetailVM;
                 });
         }
 
