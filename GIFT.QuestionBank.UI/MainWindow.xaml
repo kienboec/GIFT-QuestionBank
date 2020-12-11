@@ -58,11 +58,35 @@
                                 <Image Source="Images/delete.png" Height="16" Width="16" ></Image>
                             </Button.Content>
                         </Button>
+                        <Button Margin="0,0,0,0" Command="{Binding DataContext.PresentQuestionCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" CommandParameter="{Binding}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Content>
+                                Present
+                            </Button.Content>
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <local:QuestionDetailUserControl Grid.Row="1" Grid.Column="1" />
+        <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding DetailVM}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type local:QuestionDetailViewModel}">
+                    <local:QuestionDetailUserControl />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type local:PresentationViewModel}">
+                    <local:PresentationUserControl />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
         <Button Grid.Row="2" Grid.Column="0" Margin="5" Command="{Binding ExitCommand}">Exit</Button>
     </Grid>
 </Window>

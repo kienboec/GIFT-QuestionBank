@@ -22,8 +22,17 @@ namespace GIFT.QuestionBank.UI
         public RelayCommand ExitCommand { get; }
         public RelayCommand LoadDataCommand { get; }
         public RelayCommand<Question> DeleteQuestionCommand { get; }
-
+        public RelayCommand<Question> PresentQuestionCommand { get; }
         public event EventHandler<EventArgs> RequestExit;
+
+        private ViewModelBase _questionDetailVM;
+        private ViewModelBase _presentationVM;
+
+        public ViewModelBase DetailVM
+        {
+            get => _detailVm;
+            set => Set(ref _detailVm, value, nameof(DetailVM));
+        }
 
         public bool IsTimerEnabled
         {
@@ -37,6 +46,7 @@ namespace GIFT.QuestionBank.UI
 
         private DispatcherTimer _dispatcherTimer;
         private int _remainingSeconds;
+        private ViewModelBase _detailVm;
         public const int IntervalToLoadInSec = 10;
 
         public int RemainingSeconds
@@ -66,9 +76,13 @@ namespace GIFT.QuestionBank.UI
             _dispatcherTimer.Start();
             IsTimerEnabled = !this.IsInDesignMode;
 
+            _questionDetailVM = new QuestionDetailViewModel(Questions);
+            _presentationVM = new PresentationViewModel(Questions);
+            this.DetailVM = _questionDetailVM;
+
             if (this.IsInDesignMode)
             {
-                
+
                 {
                     var question = new Question()
                     {
@@ -137,13 +151,18 @@ namespace GIFT.QuestionBank.UI
                     DeleteQuestionCommand.RaiseCanExecuteChanged();
                 },
                 (question) => Questions.Count > 1);
+            PresentQuestionCommand = new RelayCommand<Question>(
+                (question) =>
+                {
+                    DetailVM = _presentationVM;
+                });
         }
 
         private async Task LoadData()
         {
             List<Question> questions = new List<Question>();
 
-            
+
 
             await Task.Run(async () =>
             {
@@ -158,7 +177,7 @@ namespace GIFT.QuestionBank.UI
 
                 using TcpClient client = new TcpClient("localhost", 8000);
                 using var reader = new StreamReader(client.GetStream());
-                using var writer = new StreamWriter(client.GetStream()) {AutoFlush = true};
+                using var writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
 
                 List<string> questionNames = new List<string>();
                 string line;
@@ -190,7 +209,7 @@ namespace GIFT.QuestionBank.UI
                 await writer.WriteLineAsync("QUIT");
             });
 
-            
+
 
             foreach (var question in questions)
             {
