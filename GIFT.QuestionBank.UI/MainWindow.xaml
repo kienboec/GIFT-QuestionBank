@@ -37,6 +37,7 @@
                 </Button.Content>
             </Button>
             <CheckBox IsChecked="{Binding IsTimerEnabled}">Enable Timer</CheckBox>
+            <CheckBox IsChecked="{Binding IsReadonly}">Readonly</CheckBox>
         </StackPanel>
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Questions}" IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>

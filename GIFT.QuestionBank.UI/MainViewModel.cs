@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GIFT.QuestionBank.Shared.Model;
 using GIFT.QuestionBank.Shared.Parser;
+using GIFT.QuestionBank.UI.Message;
 
 namespace GIFT.QuestionBank.UI
 {
@@ -46,9 +47,20 @@ namespace GIFT.QuestionBank.UI
             }
         }
 
+        public bool IsReadonly
+        {
+            get => _isReadonly;
+            set
+            {
+                Set(ref _isReadonly, value, nameof(IsReadonly));
+                this.MessengerInstance.Send(new ReadOnlyChangedMessage() { IsReadonly = IsReadonly });
+            }
+        }
+
         private DispatcherTimer _dispatcherTimer;
         private int _remainingSeconds;
         private ViewModelBase _detailVm;
+        private bool _isReadonly;
         public const int IntervalToLoadInSec = 10;
 
         public int RemainingSeconds

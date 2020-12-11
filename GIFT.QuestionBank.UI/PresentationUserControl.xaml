@@ -16,9 +16,14 @@
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Questions/Choices}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Text}" />
+                    <CheckBox IsEnabled="{Binding  DataContext.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PresentationUserControl}}}" Content="{Binding Text}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"></StackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
         </ItemsControl>
     </Grid>
 </UserControl>

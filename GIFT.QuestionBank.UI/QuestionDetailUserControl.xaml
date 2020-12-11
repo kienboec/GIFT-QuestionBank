@@ -21,13 +21,14 @@
     <StackPanel  Orientation="Vertical">
             <WrapPanel Margin="5">
                 <Label Width="100">Question Name</Label>
-                <TextBox Text="{Binding Questions/QuestionName}"></TextBox>
+                <TextBox IsReadOnly="{Binding IsReadonly}" Text="{Binding Questions/QuestionName}"></TextBox>
             </WrapPanel>
             <WrapPanel Margin="5">
                 <Label Width="100">Question Text</Label>
-                <TextBox Style="{StaticResource TextAreaStyle}" Text="{Binding Questions/QuestionText}" />
+            <TextBox IsReadOnly="{Binding IsReadonly}" Style="{StaticResource TextAreaStyle}" Text="{Binding Questions/QuestionText}" />
             </WrapPanel>
             <DataGrid ItemsSource="{Binding Questions/Choices}"
+                      IsReadOnly="{Binding IsReadonly}"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Text}" Header="Choice"/>
