@@ -11,12 +11,12 @@ namespace GIFT.QuestionBank.UI
 {
     public class PresentationViewModel : ViewModelBase
     {
-        public PresentationViewModel(ObservableCollection<Question> questions)
+        public PresentationViewModel(QuestionStore questionStore)
         {
-            this.Questions = questions;
+            this._questionStore = questionStore;
         }
 
-        public ObservableCollection<Question> Questions { get; }
-
+        public ObservableCollection<Question> Questions => _questionStore.Questions;
+        private QuestionStore _questionStore;
     }
 }

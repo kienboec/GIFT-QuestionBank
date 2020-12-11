@@ -17,7 +17,10 @@ namespace GIFT.QuestionBank.UI
 {
     public class MainViewModel : ViewModelBase
     {
-        public ObservableCollection<Question> Questions { get; }
+        private QuestionStore _questionStore;
+        private NavigationService _navigationService;
+        public ObservableCollection<Question> Questions
+            => _questionStore.Questions;
 
         public RelayCommand ExitCommand { get; }
         public RelayCommand LoadDataCommand { get; }
@@ -26,9 +29,6 @@ namespace GIFT.QuestionBank.UI
         public RelayCommand<Question> EditQuestionCommand { get; }
 
         public event EventHandler<EventArgs> RequestExit;
-
-        private ViewModelBase _questionDetailVM;
-        private ViewModelBase _presentationVM;
 
         public ViewModelBase DetailVM
         {
@@ -60,9 +60,11 @@ namespace GIFT.QuestionBank.UI
             }
         }
 
-        public MainViewModel()
+        public MainViewModel(QuestionStore questionStore, NavigationService navigationService)
         {
-            Questions = new ObservableCollection<Question>();
+            _questionStore = questionStore;
+            _navigationService = navigationService;
+
             RemainingSeconds = IntervalToLoadInSec;
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
@@ -76,67 +78,9 @@ namespace GIFT.QuestionBank.UI
                 }
             };
             _dispatcherTimer.Start();
-            IsTimerEnabled = !this.IsInDesignMode;
+            IsTimerEnabled = false;
 
-            _questionDetailVM = new QuestionDetailViewModel(Questions);
-            _presentationVM = new PresentationViewModel(Questions);
-            this.DetailVM = _questionDetailVM;
-
-            if (this.IsInDesignMode)
-            {
-
-                {
-                    var question = new Question()
-                    {
-                        QuestionName = "PeopleInGrantsTomb",
-                        QuestionText = "What two people are entombed in Grant's tomb?"
-                    };
-
-                    question.Choices.Add(new QuestionChoice()
-                    {
-                        Percentage = -100,
-                        Text = "No one",
-                        Feedback = null
-                    });
-
-                    question.Choices.Add(
-                        new QuestionChoice()
-                        {
-                            Percentage = 100,
-                            Text = "Some one",
-                            Feedback = "right... good choice"
-                        });
-
-                    Questions.Add(question);
-                }
-
-                {
-                    var question = new Question()
-                    {
-                        QuestionName = "name1",
-                        QuestionText = "text1",
-                    };
-
-                    question.Choices.Add(
-                        new QuestionChoice()
-                        {
-                            Percentage = 100,
-                            Text = "good",
-                            Feedback = "right... good choice"
-                        });
-
-                    question.Choices.Add(
-                        new QuestionChoice()
-                        {
-                            Percentage = -100,
-                            Text = "bad",
-                            Feedback = null
-                        });
-
-                    Questions.Add(question);
-                }
-
-            }
+            this.DetailVM = this._navigationService.GetViewModel(NavigationService.Detail);
 
             LoadDataCommand = new RelayCommand(async () =>
             {
@@ -156,12 +100,12 @@ namespace GIFT.QuestionBank.UI
             PresentQuestionCommand = new RelayCommand<Question>(
                 (question) =>
                 {
-                    DetailVM = _presentationVM;
+                    DetailVM = this._navigationService.GetViewModel(NavigationService.Presentation);
                 });
             EditQuestionCommand = new RelayCommand<Question>(
                 (question) =>
                 {
-                    DetailVM = _questionDetailVM;
+                    DetailVM = this._navigationService.GetViewModel(NavigationService.Detail);
                 });
         }
 

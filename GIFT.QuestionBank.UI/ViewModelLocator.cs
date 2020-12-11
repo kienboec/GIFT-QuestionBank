@@ -11,6 +11,11 @@ namespace GIFT.QuestionBank.UI
     {
         public ViewModelLocator()
         {
+            SimpleIoc.Default.Register<QuestionStore>();
+            SimpleIoc.Default.Register<NavigationService>();
+
+            SimpleIoc.Default.Register<QuestionDetailViewModel>();
+            SimpleIoc.Default.Register<PresentationViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
 
